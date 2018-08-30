@@ -1,0 +1,114 @@
+/* 
+** Output directional padding/margin style
+** $type: 'padding/margin', $direction: 'top/bottom/left/right' 
+*/
+
+@mixin Direction($type, $direction) {
+  &15 {
+    #{$type}-#{$direction}: 15px;
+  }
+
+  &25 {
+    #{$type}-#{$direction}: 25px;
+  }
+
+  &35 {
+    #{$type}-#{$direction}: 35px;
+  }
+}
+
+/* 
+** Output axial padding/margin style
+** $type: 'padding/margin', $direction: 'x/y' 
+*/
+
+@mixin Axis($type, $axis) {
+  @if $axis == x {
+    &15 {
+      #{$type}: 0px 15px;
+    }
+  
+    &25 {
+      #{$type}: 0px 25px;
+    }
+  
+    &35 {
+      #{$type}: 0px 35px;
+    }
+  }
+
+  @if $axis == y {
+    &15 {
+      #{$type}: 15px 0px;
+    }
+  
+    &25 {
+      #{$type}: 25px 0px;
+    }
+  
+    &35 {
+      #{$type}: 35px 0px;
+    }
+  }
+}
+
+/* 
+  Margin: Top, Bottom, Left, Right
+*/
+.mt- {
+ @include Direction(margin, top)
+}
+
+.mb- {
+  @include Direction(margin, bottom)
+}
+
+.ml- {
+  @include Direction(margin, left)
+}
+
+.mr- {
+  @include Direction(margin, right)
+}
+
+/* 
+  Margin: X-Asix, Y-Axis
+*/
+.mx- {
+  @include Axis(margin, x)
+}
+
+.my- {
+  @include Axis(margin, y)
+}
+
+
+/* 
+  Padding: Top, Bottom, Left, Right
+*/
+.pt- {
+  @include Direction(padding, top)
+ }
+ 
+.pb- {
+  @include Direction(padding, bottom)
+}
+
+.pl- {
+  @include Direction(padding, left)
+}
+
+.pr- {
+  @include Direction(padding, right)
+}
+ 
+ /* 
+   Padding: X-Asix, Y-Axis
+ */
+ .px- {
+   @include Axis(padding, x)
+ }
+ 
+ .py- {
+   @include Axis(padding, y)
+ }

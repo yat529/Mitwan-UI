@@ -1,0 +1,58 @@
+/* 
+** Ripple Effect
+** @Note: Parent ele must be relative positioned
+*/
+
+.ripple-container {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .ripple {
+    display: inline-block;
+    position: absolute;
+    border-radius: 100%;
+    transform: scale(0);
+    transform-origin: center;
+    opacity: 0.45;
+    animation: grow 2s cubic-bezier(0, 0, 0, 0.71);
+  }
+
+  @keyframes grow {
+    to {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+}
+
+
+/* 
+** box shadow
+** @Note: apply to the div.shadow child by v-shadow directive
+*/
+
+.shadow {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    bottom: 0px;
+    left: 5px;
+    right: 5px;
+    background: #ffffff;
+    box-shadow: 0 2px 15px -5px rgba(0, 0, 0, 0.5);
+    z-index: -99;
+  }
+}
