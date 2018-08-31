@@ -113,6 +113,10 @@ export default {
 
 
 <style lang="scss">
+@import '~assets/style/color';
+
+$easing: cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+
 .mt-navbar-wrapper {
   position: relative;
   width: 100%;
@@ -177,7 +181,7 @@ export default {
       bottom: 0px;
       background: transparent;
       opacity: 0;
-      transition: all 0.2s ease-out;
+      transition: all 0.2s $easing;
       user-select: none;
       pointer-events: none;
       z-index: -1;
@@ -198,9 +202,10 @@ export default {
       top: 0px;
       bottom: 0px;
       left: 0px;
-      width: 60%;
-      max-width: 340px;
+      width: 80%;
+      max-width: 450px;
       background: #7167D5;
+      box-shadow: 3px 0px 10px -5px rgba(0, 0, 0, 0.7);
       user-select: auto;
       pointer-events: auto;
 
@@ -312,10 +317,16 @@ export default {
 
 
 .slide-enter-active, .slide-leave-active {
-  transition: all 0.3s ease-out;
+  transition: all 0.3s $easing;
 }
+
+.slide-enter-active {
+  transition-delay: 0.1s;
+}
+
 .slide-enter, .slide-leave-to {
   transform: translateX(-340px);
+  will-change: transform;
 }
 
 </style>
