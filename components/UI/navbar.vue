@@ -1,7 +1,7 @@
 <template>
   <div class="mt-navbar-wrapper">
 
-    <div class="mt-navbar">
+    <div class="mt-navbar mt-layout-row">
 
       <div class="toggle">
         <div class="hamburger" :class="active ? 'active' : ''" ref="hamburger" @click="toggleSideMenu">
@@ -16,8 +16,8 @@
         <h1>米团</h1>
       </div>
 
-      <div class="menu">
-        <div class="menu-item" v-for="num in 3" :key="num">
+      <div class="menu mt-layout-row row-right">
+        <div class="menu-item mt-layout-row row-center" v-for="num in 3" :key="num">
           <mt-icon v-if="true" 
             faStyleClass="fa-fw fa-lg"
             :faName="menuIcon" 
@@ -41,7 +41,7 @@
           <h1>米团</h1>
         </div>
 
-        <div class="menu-item" v-for="num in 3" :key="num">
+        <div class="menu-item mt-layout-row row-center" v-for="num in 3" :key="num">
           <mt-icon v-if="true" 
             faStyleClass="fa-fw"
             :faName="menuIcon" 
@@ -50,7 +50,7 @@
           <span>{{ '项目 ' + num }}</span>
         </div>
 
-        <div class="control">
+        <div class="control mt-layout-row">
           <div class="toggle">
             <div class="hamburger" :class="active ? 'active' : ''">
               <span class="bar top"></span>
@@ -119,8 +119,8 @@ export default {
   height: 45px;
 
   .mt-navbar {
-    display: flex;
-    align-items: center;
+    // display: flex;
+    // align-items: center;
     width: 100%;
     height: 100%;
 
@@ -133,9 +133,9 @@ export default {
 
     .menu {
       flex: 1;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
+      // display: flex;
+      // justify-content: flex-end;
+      // align-items: center;
       height: 100%;
 
       @media (max-width: 500px) {
@@ -143,8 +143,8 @@ export default {
       }
 
       .menu-item {
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
         width: 100%;
         max-width: 100px;
         height: 100%;
@@ -201,8 +201,10 @@ export default {
       width: 60%;
       max-width: 340px;
       background: #7167D5;
+      box-shadow: 3px 0px 10px -3px rgba(0, 0, 0, 0.3);
       user-select: auto;
       pointer-events: auto;
+      will-change: transform;
 
       .brand {
         height: 50px;
@@ -211,9 +213,6 @@ export default {
       }
       
       .menu-item {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         width: 100%;
         height: 50px;
 
@@ -229,7 +228,6 @@ export default {
       }
 
       .control {
-        display: flex;
         position: absolute;
         left: 0px;
         bottom: 0px;
@@ -314,6 +312,11 @@ export default {
 .slide-enter-active, .slide-leave-active {
   transition: all 0.3s ease-out;
 }
+
+.slide-enter-active {
+  transition-delay: 0.1s;
+}
+
 .slide-enter, .slide-leave-to {
   transform: translateX(-340px);
 }
