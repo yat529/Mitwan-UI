@@ -1,7 +1,7 @@
 <template>
   <div class="mt-navbar-wrapper">
 
-    <div class="mt-navbar">
+    <div class="mt-navbar mt-layout-row">
 
       <div class="toggle">
         <div class="hamburger" :class="active ? 'active' : ''" ref="hamburger" @click="toggleSideMenu">
@@ -16,8 +16,8 @@
         <h1>米团</h1>
       </div>
 
-      <div class="menu">
-        <div class="menu-item" v-for="num in 3" :key="num">
+      <div class="menu mt-layout-row row-right">
+        <div class="menu-item mt-layout-row row-center" v-for="num in 3" :key="num">
           <mt-icon v-if="true" 
             faStyleClass="fa-fw fa-lg"
             :faName="menuIcon" 
@@ -41,7 +41,7 @@
           <h1>米团</h1>
         </div>
 
-        <div class="menu-item" v-for="num in 3" :key="num">
+        <div class="menu-item mt-layout-row row-center" v-for="num in 3" :key="num">
           <mt-icon v-if="true" 
             faStyleClass="fa-fw"
             :faName="menuIcon" 
@@ -50,7 +50,7 @@
           <span>{{ '项目 ' + num }}</span>
         </div>
 
-        <div class="control">
+        <div class="control mt-layout-row">
           <div class="toggle">
             <div class="hamburger" :class="active ? 'active' : ''">
               <span class="bar top"></span>
@@ -123,8 +123,8 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   height: 45px;
 
   .mt-navbar {
-    display: flex;
-    align-items: center;
+    // display: flex;
+    // align-items: center;
     width: 100%;
     height: 100%;
 
@@ -137,9 +137,9 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     .menu {
       flex: 1;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
+      // display: flex;
+      // justify-content: flex-end;
+      // align-items: center;
       height: 100%;
 
       @media (max-width: 500px) {
@@ -147,8 +147,8 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
 
       .menu-item {
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
         width: 100%;
         max-width: 100px;
         height: 100%;
@@ -205,9 +205,14 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       width: 80%;
       max-width: 450px;
       background: #7167D5;
+<<<<<<< HEAD
       box-shadow: 3px 0px 10px -5px rgba(0, 0, 0, 0.7);
+=======
+      box-shadow: 3px 0px 10px -3px rgba(0, 0, 0, 0.3);
+>>>>>>> cf09e9f33fc85e990300bc57f96549c764f73824
       user-select: auto;
       pointer-events: auto;
+      will-change: transform;
 
       .brand {
         height: 50px;
@@ -216,9 +221,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
       
       .menu-item {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         width: 100%;
         height: 50px;
 
@@ -234,7 +236,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
 
       .control {
-        display: flex;
         position: absolute;
         left: 0px;
         bottom: 0px;
