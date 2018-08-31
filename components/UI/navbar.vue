@@ -205,11 +205,7 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       width: 80%;
       max-width: 450px;
       background: #7167D5;
-<<<<<<< HEAD
       box-shadow: 3px 0px 10px -5px rgba(0, 0, 0, 0.7);
-=======
-      box-shadow: 3px 0px 10px -3px rgba(0, 0, 0, 0.3);
->>>>>>> cf09e9f33fc85e990300bc57f96549c764f73824
       user-select: auto;
       pointer-events: auto;
       will-change: transform;
