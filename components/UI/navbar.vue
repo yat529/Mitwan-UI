@@ -1,29 +1,24 @@
 <template>
   <div class="mt-navbar-wrapper">
 
-    <div class="mt-navbar mt-layout-row">
+    <div class="mt-navbar mt-layout-row" :style="navbarStyle">
 
       <div class="toggle">
-        <div class="hamburger" :class="active ? 'active' : ''" ref="hamburger" @click="toggleSideMenu">
-          <span class="bar top"></span>
-          <span class="bar middle"></span>
-          <span class="bar bottom"></span>
-        </div>
+        <hamburger ref="hamburger" :color="barFontColor" @toggle="toggleSideMenu"></hamburger>
       </div>
 
       <div class="brand">
         <img />
-        <h1>米团</h1>
+        <h1>Title</h1>
       </div>
 
       <div class="menu mt-layout-row row-right">
-        <div class="menu-item mt-layout-row row-center" v-for="num in 3" :key="num">
-          <mt-icon v-if="true" 
+        <div class="menu-item mt-layout-row row-center" v-for="(item, index) in menu" :key="index">
+          <mt-icon v-if="item.icon"
             faStyleClass="fa-fw fa-lg"
-            :faName="menuIcon" 
-            :color="textColor"/>
+            :faName="item.icon"/>
 
-          <span>{{ '项目 ' + num }}</span>
+          <span>{{ item.item }}</span>
         </div>
       </div>
     </div><!-- .mt-navbar -->
@@ -33,30 +28,55 @@
 
       <transition name="slide">
       <div class="side-menu" ref="sideMenu"
-        v-show="showSideMenu"
-        v-click-outside="hdieSideMenu">
+        :style="sidebarStyle"
+        v-if="showSideMenu"
+        v-click-outside="clickOutsideTohide">
 
         <div class="brand">
           <img />
-          <h1>米团</h1>
+          <h1>Title</h1>
         </div>
 
-        <div class="menu-item mt-layout-row row-center" v-for="num in 3" :key="num">
-          <mt-icon v-if="true" 
-            faStyleClass="fa-fw"
-            :faName="menuIcon" 
-            :color="textColor"/>
+        <div class="menu-item-wrapper" v-for="(item, index) in menu" :key="index">
+          <nuxt-link class="menu-item mt-layout-row row-center px-35" 
+            :to="item.link"
+            v-ripple="{ color: '#7167D5' }">
+            <mt-icon v-if="item.icon" 
+              :style="`color: ${SidebarFontColor}`"
+              faStyleClass="fa-fw"
+              :faName="item.icon"/>
 
-          <span>{{ '项目 ' + num }}</span>
+            <p :style="`color: ${SidebarFontColor}`">{{ item.label }}</p>
+          </nuxt-link>
+
+          <div class="carret mt-layout-row row-center" v-if="item.submenu"
+            :class="item.showSubmenu ? 'active' : ''"
+            @click="toggleSubmenu(item)">
+
+            <mt-icon faName="fas fa-caret-left" :style="`color: ${SidebarFontColor}`"/>
+          </div>
+
+          <transition name="show">
+          <div class="submenu-item-wrapper" v-if="item.showSubmenu">
+            <nuxt-link class="menu-item mt-layout-row row-center px-35" v-for="(subitem, index) in item.submenu" :key="index"
+              :to="item.link + '/' + subitem.link"
+              :style="sidebarSubmenuStyle"
+              v-ripple="{ color: '#7167D5' }">
+              <mt-icon v-if="subitem.icon" 
+                :style="`color: ${SidebarSubmenuFontColor}`"
+                faStyleClass="fa-fw"
+                :faName="subitem.icon"/>
+
+              <p :style="`color: ${SidebarSubmenuFontColor}`">{{ subitem.label }}</p>
+            </nuxt-link>
+          </div>
+          </transition>
+
         </div>
 
         <div class="control mt-layout-row">
           <div class="toggle">
-            <div class="hamburger" :class="active ? 'active' : ''">
-              <span class="bar top"></span>
-              <span class="bar middle"></span>
-              <span class="bar bottom"></span>
-            </div>
+            <hamburger ref="sideHamburger" :color="barFontColor" @toggle="hieSideMenu"></hamburger>
           </div>
 
           <div class="setting"></div>
@@ -70,7 +90,145 @@
 </template>
 
 <script>
+import hamburger from '@/components/icons/hamburger'
+
 export default {
+  components: {
+    hamburger
+  },
+
+  props: {
+    menu: {
+      type: Array,
+      require: true,
+      default () {
+        return [
+          {
+            label: 'Home',
+            icon: 'fas fa-home',
+            link: '/home'
+          },
+          {
+            label: 'User',
+            icon: 'fas fa-user',
+            link: '/user',
+            submenu: [
+              {
+                label: 'Admin',
+                icon: 'fas fa-cog',
+                link: '/admin'
+              },
+              {
+                label: 'New Post',
+                icon: 'fas fa-pen',
+                link: '/new'
+              },
+              {
+                label: 'View Post',
+                icon: 'fas fa-list-ul',
+                link: '/view'
+              },
+            ]
+          },
+          {
+            label: 'About',
+            icon: 'fas fa-info-circle',
+            link: '/3'
+          },
+          {
+            label: 'Contact',
+            icon: 'fas fa-phone',
+            link: '/4'
+          },
+        ]
+      }
+    },
+
+    /* 
+    ** Navbar Style Props
+    */
+
+    // Navbar font color
+    barFontColor: {
+      type: String,
+      require: false,
+      default: 'white'
+    },
+
+    barSubmenuFontColor: {
+      type: String,
+      require: false,
+      default: 'white'
+    },
+
+    // background color
+    barBackground: {
+      type: String,
+      require: false,
+      default: '#7167D5'
+    },
+
+    // gradient background
+    // ['from color', 'to color', 'direction]
+    barGradientBackground: {
+      type: Array,
+      require: false,
+      default () {
+        return ['#7167D5', '#53A0FD']
+      }
+    },
+
+    // submenu backgorund
+    barSubmenuBackground: {
+      type: String,
+      require: false
+    },
+    
+
+    /* 
+    ** Submenu Style Props
+    */
+
+    // Sidebar font color
+    SidebarFontColor: {
+      type: String,
+      require: false,
+      default: 'white'
+    },
+
+    SidebarSubmenuFontColor: {
+      type: String,
+      require: false,
+      default: 'black'
+    },
+
+    // background color
+    SidebarBackground: {
+      type: String,
+      require: false,
+      default: '#7167D5'
+    },
+
+    // gradient background
+    // ['from color', 'to color', 'direction]
+    SidebarGradientBackground: {
+      type: Array,
+      require: false,
+      default () {
+        return ['#7167D5', '#53A0FD']
+      }
+    },
+
+    // submenu backgorund
+    SidebarSubmenuBackground: {
+      type: String,
+      require: false,
+      default: 'white'
+    },
+
+
+  },
+
   data () {
     return {
       active: false,
@@ -79,33 +237,135 @@ export default {
   },
 
   computed: {
-    menuIcon () {
-      return 'far fa-dot-circle'
+    navbarStyle () {
+      let style ='',
+          color = 'color: ',
+          backgroundColor = 'background-color: ',
+          backgroundImage = 'background-image: '
+
+      if (this.barFontColor) {
+        color += this.barFontColor + ';'
+        style += color
+      }
+
+      if (this.SidebarGradientBackground) {
+        let direction = this.SidebarGradientBackground.length === 3 ? this.SidebarGradientBackground[2] : 'right'
+        backgroundImage += `linear-gradient(to ${direction}, ${this.SidebarGradientBackground[0]}, ${this.SidebarGradientBackground[1]};`
+        style += backgroundImage
+      } else if (this.SidebarBackground) {
+        backgroundColor += this.SidebarBackground + ';'
+        style += backgroundColor
+      }
+
+      return style
     },
-    textColor () {
-      return 'black'
-    }
+
+    sidebarStyle () {
+      let style ='',
+          color = 'color: ',
+          backgroundColor = 'background-color: ',
+          backgroundImage = 'background-image: '
+
+      if (this.SidebarFontColor) {
+        color += this.SidebarFontColor + ';'
+        style += color
+      }
+
+      if (this.barGradientBackground) {
+        let direction = this.barGradientBackground.length === 3 ? this.barGradientBackground[2] : 'bottom'
+        backgroundImage += `linear-gradient(to ${direction}, ${this.barGradientBackground[0]}, ${this.barGradientBackground[1]};`
+        style += backgroundImage
+      } else if (this.barBackground) {
+        backgroundColor += this.barBackground + ';'
+        style += backgroundColor
+      }
+
+      return style
+    },
+
+    sidebarSubmenuStyle () {
+      let style ='',
+          color = 'color: ',
+          backgroundColor = 'background-color: '
+      
+      if (this.SidebarSubmenuFontColor) {
+        color += this.SidebarSubmenuFontColor + ';'
+        style += color
+      }
+
+      if (this.SidebarSubmenuBackground) {
+        backgroundColor += this.SidebarSubmenuBackground + ';'
+        style += backgroundColor
+      }
+
+      return style
+    },
   },
 
   methods: {
-    toggleSideMenu (event) {
-      let $toggle = this.$refs.hamburger
+    toggleSideMenu (payload) {
+      this.active = payload
+      this.showSideMenu = payload
 
-      if (event.target === $toggle || $toggle.contains(event.target) ) {
-        this.active = !this.active
-        this.showSideMenu = !this.showSideMenu
-      }
+      // sync active property of hamburger
+      this.$nextTick(() => {
+        let sideToggle = this.$refs.sideHamburger
+        sideToggle.active = payload
+      })
     },
 
-    hdieSideMenu (event) {
-      let $toggle = this.$refs.hamburger,
+    hieSideMenu () {
+      let toggle = this.$refs.hamburger
+
+      this.active = false
+      this.showSideMenu = false
+
+      // sync active property of hamburger
+      toggle.active = false
+    },
+
+    clickOutsideTohide (event) {
+      let $toggle = this.$refs.hamburger.$el,
+          $sideToggle = this.$refs.sideHamburger.$el,
           $sideMenu = this.$refs.sideMenu
 
-      if (this.showSideMenu && !(event.target === $sideMenu || $sideMenu.contains(event.target)) && !(event.target === $toggle || $toggle.contains(event.target)) ) {
-        this.active = false
-        this.showSideMenu = false
+      if (this.showSideMenu && ((event.target === $sideToggle || $sideToggle.contains(event.target)) || !(event.target === $sideMenu || $sideMenu.contains(event.target)) && !(event.target === $toggle || $toggle.contains(event.target))) ) {
+        this.hieSideMenu()
       }
     },
+
+    toggleSubmenu (item) {
+      let $menuItemWrapper = event.currentTarget.parentElement
+          
+
+      if (!item.showSubmenu || 'showSubmenu' in item === false) {
+        if ('showSubmenu' in item === false) {
+          this.$set(item, 'showSubmenu', true)
+        }
+
+        item.showSubmenu = true
+
+        this.$nextTick(() => {
+          let menuItemWrapperHeight = $menuItemWrapper.offsetHeight,
+              $submenu = $menuItemWrapper.querySelector('.submenu-item-wrapper'),
+              submenuItemWrapperHeight = 0
+
+          for (let $subitem of $submenu.children) {
+            submenuItemWrapperHeight += $subitem.offsetHeight
+          }
+
+          menuItemWrapperHeight += submenuItemWrapperHeight
+          $menuItemWrapper.style.height = menuItemWrapperHeight + 'px'
+
+          $menuItemWrapper.classList.add('active')
+        })
+
+      } else {
+        item.showSubmenu = false
+        $menuItemWrapper.style.height = null
+        $menuItemWrapper.classList.remove('active')
+      }
+    }
   }
 }
 </script>
@@ -120,7 +380,7 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 .mt-navbar-wrapper {
   position: relative;
   width: 100%;
-  height: 45px;
+  height: 50px;
 
   .mt-navbar {
     // display: flex;
@@ -204,30 +464,80 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       left: 0px;
       width: 80%;
       max-width: 450px;
-      background: #7167D5;
-      box-shadow: 3px 0px 10px -5px rgba(0, 0, 0, 0.7);
+      background: white;
+      box-shadow: 3px 0px 25px -5px rgba(0, 0, 0, 0.4);
       user-select: auto;
       pointer-events: auto;
       will-change: transform;
 
       .brand {
-        height: 50px;
+        height: 100px;
         max-width: 340px;
         text-align: center;
       }
-      
-      .menu-item {
-        width: 100%;
-        height: 50px;
 
-        i {
-          flex: 0;
-          margin-right: 15px;
-          max-width: 50px;
+      .menu-item-wrapper {
+        position: relative;
+        width: 100%;
+        height: 70px;
+        transition: height 0.2s $easing;
+        overflow: hidden;
+
+        .menu-item {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 70px;
+          text-decoration: none;
+          color: $fontColor;
+
+          i {
+            flex: 0;
+            margin-right: 35px;
+          }
+
+          p {
+            flex: 1;
+          }
         }
-        span {
-          flex: 1;
-          max-width: 150px;
+
+        .carret {
+          position: absolute;
+          top: 22.5px;
+          right: 35px;
+          width: 25px;
+          height: 25px;
+          border-radius: 100%;
+          flex-basis: 25px;
+          text-align: center;
+          transition: transform 0.2s linear;
+          z-index: 3;
+
+          &.active {
+            transform: rotate(-90deg);
+          }
+
+          i {
+            margin: 0;
+          }
+        }
+
+        .submenu-item-wrapper {
+          position: relative;
+          width: 100%;
+          background: #eeeeee;
+          box-shadow: inset -1px 1px 3px -2px rgba(0, 0, 0, 0.4), inset -1px -1px 3px -2px rgba(0, 0, 0, 0.4);
+
+          .menu-item {
+            height: 50px;
+            text-decoration: none;
+            color: lighten($fontColor, 20%);
+
+            &:last-child {
+              border-bottom: 1px solid transparent;
+            }
+          }
         }
       }
 
@@ -249,9 +559,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
       }
     }
-
-    
-    
   }
 }
 
@@ -313,6 +620,11 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 
+/* 
+** Transitions 
+*/
+
+
 .slide-enter-active, .slide-leave-active {
   transition: all 0.3s $easing;
 }
@@ -324,6 +636,18 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 .slide-enter, .slide-leave-to {
   transform: translateX(-340px);
   will-change: transform;
+}
+
+.show-enter-active, .show-leave-active {
+  transition: all 0.1s $easing;
+}
+
+.show-enter {
+  transition-delay: 0.1s;
+}
+
+.show-enter, .show-leave-to {
+  opacity: 0;
 }
 
 </style>

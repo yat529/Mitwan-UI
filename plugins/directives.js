@@ -56,7 +56,7 @@ const ripple = {
 
       if ( typeof binding.value === 'object' && binding.value.color ) {
         createRipple(event, el, $rippleContainer, binding.value.color)
-        setTimeout(() => createRipple(event, el, $rippleContainer, binding.value.color), 140)
+        // setTimeout(() => createRipple(event, el, $rippleContainer, binding.value.color), 140)
       }
 
       function createRipple (event, el, $parent, color) {
