@@ -4,6 +4,10 @@
 */
 
 @mixin Direction($type, $direction) {
+  &0 {
+    #{$type}-#{$direction}: 0px !important;
+  }
+
   &15 {
     #{$type}-#{$direction}: 15px;
   }
@@ -24,6 +28,10 @@
 
 @mixin Axis($type, $axis) {
   @if $axis == x {
+    &0 {
+      #{$type}: 0px !important;
+    }
+
     &15 {
       #{$type}: 0px 15px;
     }
@@ -38,6 +46,10 @@
   }
 
   @if $axis == y {
+    &0 {
+      #{$type}: 0px !important;
+    }
+
     &15 {
       #{$type}: 15px 0px;
     }
@@ -102,24 +114,46 @@
   @include Direction(padding, right)
 }
  
- /* 
-   Padding: X-Asix, Y-Axis
- */
- .px- {
-   @include Axis(padding, x)
- }
- 
- .py- {
-   @include Axis(padding, y)
- }
+/* 
+  Padding: X-Asix, Y-Axis
+*/
+.px- {
+  @include Axis(padding, x)
+}
+
+.py- {
+  @include Axis(padding, y)
+}
+
+/* 
+Navbar Padding Fix
+*/
+.navbar-fix {
+  padding-top: 50px;
+}
 
 
 
- /* 
- ** Positions
- */
+/* 
+** Positions
+*/
 
- .mt-layout-row {
+// Absolute Position
+.mt-layout-abs {
+  position: absolute;
+}
+// Fixed Postion
+.mt-layout-fixed {
+  position: fixed;
+}
+
+
+
+/* 
+** Layout
+*/
+
+.mt-layout-row {
    display: flex;
    flex-direction: row;
    flex-wrap: nowrap;
@@ -132,6 +166,7 @@
   //  alignment classes
   &.row-center {
     justify-content: center;
+    align-items: center;
   }
   &.row-left {
     justify-content: flex-start;
@@ -139,4 +174,20 @@
   &.row-right {
     justify-content: flex-end;
   }
- }
+}
+
+/* 
+** Full Screen
+** Note: reuiqred absolute or fixed position
+*/
+.cover-screen {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+
+
+
+

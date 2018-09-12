@@ -42,7 +42,8 @@ export default {
 
   computed: {
     classNames () {
-      return this.faName || '' + ' ' + this.faStyleClass || ''
+      // return this.faName || '' + ' ' + this.faStyleClass || ''
+      return `${this.faName} ${this.faStyleClass}`
     },
 
     style () {

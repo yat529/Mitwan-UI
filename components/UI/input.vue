@@ -303,7 +303,7 @@ export default {
 <style lang="scss" scoped>
 @import '~assets/style/color';
 
-$easing: cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+$easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 .mt-input {
   position: relative;

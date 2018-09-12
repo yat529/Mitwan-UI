@@ -3,28 +3,41 @@
 
     <div class="mt-navbar mt-layout-row" :style="navbarStyle">
 
-      <div class="toggle">
+      <div class="toggle" v-if="showMenuToggle">
         <hamburger ref="hamburger" :color="barFontColor" @toggle="toggleSideMenu"></hamburger>
       </div>
+      <div class="px-15" v-else></div>
 
       <div class="brand">
         <img />
         <h1>Title</h1>
       </div>
 
-      <div class="menu mt-layout-row row-right">
-        <div class="menu-item mt-layout-row row-center" v-for="(item, index) in menu" :key="index">
+      <div class="menu mt-layout-row row-right pr-15">
+        <!-- <div class="menu-item mt-layout-row row-center" v-for="(item, index) in menu" :key="index">
           <mt-icon v-if="item.icon"
-            faStyleClass="fa-fw fa-lg"
+            :style="`color: ${ barFontColor }`"
+            faStyleClass="fa-fw"
             :faName="item.icon"/>
 
-          <span>{{ item.item }}</span>
+          <span>{{ item.label }}</span>
+        </div> -->
+
+        <div class="menu-item square-item mt-layout-row row-center" @click="searchClicked">
+          <mt-icon class="mr-0"
+            :style="`color: ${ barFontColor }`"
+            faStyleClass="fa-fw"
+            faName="fas fa-search"/>
+        </div>
+
+        <div class="menu-item square-item mt-layout-row row-center" v-if="avatarURL" @click="avatarClicked">
+          <div class="avatar" :style="avatarBgStyle"></div>
         </div>
       </div>
+
     </div><!-- .mt-navbar -->
 
-    <div class="mt-navbar-side" 
-      :class="showSideMenu ? 'dim' : ''">
+    <div class="mt-navbar-side" :class="showSideMenu ? 'dim' : ''">
 
       <transition name="slide">
       <div class="side-menu" ref="sideMenu"
@@ -37,42 +50,7 @@
           <h1>Title</h1>
         </div>
 
-        <div class="menu-item-wrapper" v-for="(item, index) in menu" :key="index">
-          <nuxt-link class="menu-item mt-layout-row row-center px-35" 
-            :to="item.link"
-            v-ripple="{ color: '#7167D5' }">
-            <mt-icon v-if="item.icon" 
-              :style="`color: ${SidebarFontColor}`"
-              faStyleClass="fa-fw"
-              :faName="item.icon"/>
-
-            <p :style="`color: ${SidebarFontColor}`">{{ item.label }}</p>
-          </nuxt-link>
-
-          <div class="carret mt-layout-row row-center" v-if="item.submenu"
-            :class="item.showSubmenu ? 'active' : ''"
-            @click="toggleSubmenu(item)">
-
-            <mt-icon faName="fas fa-caret-left" :style="`color: ${SidebarFontColor}`"/>
-          </div>
-
-          <transition name="show">
-          <div class="submenu-item-wrapper" v-if="item.showSubmenu">
-            <nuxt-link class="menu-item mt-layout-row row-center px-35" v-for="(subitem, index) in item.submenu" :key="index"
-              :to="item.link + '/' + subitem.link"
-              :style="sidebarSubmenuStyle"
-              v-ripple="{ color: '#7167D5' }">
-              <mt-icon v-if="subitem.icon" 
-                :style="`color: ${SidebarSubmenuFontColor}`"
-                faStyleClass="fa-fw"
-                :faName="subitem.icon"/>
-
-              <p :style="`color: ${SidebarSubmenuFontColor}`">{{ subitem.label }}</p>
-            </nuxt-link>
-          </div>
-          </transition>
-
-        </div>
+        <mt-list :list="menu"/>
 
         <div class="control mt-layout-row">
           <div class="toggle">
@@ -112,7 +90,7 @@ export default {
             label: 'User',
             icon: 'fas fa-user',
             link: '/user',
-            submenu: [
+            sublist: [
               {
                 label: 'Admin',
                 icon: 'fas fa-cog',
@@ -144,6 +122,19 @@ export default {
       }
     },
 
+    // Avatar URL
+    avatarURL: {
+      type: String,
+      require: false
+    },
+
+    // Hamburger function toggle
+    showMenuToggle: {
+      type: Boolean,
+      require: false,
+      default: true,
+    },
+
     /* 
     ** Navbar Style Props
     */
@@ -165,7 +156,7 @@ export default {
     barBackground: {
       type: String,
       require: false,
-      default: '#7167D5'
+      // default: '#7167D5'
     },
 
     // gradient background
@@ -173,9 +164,9 @@ export default {
     barGradientBackground: {
       type: Array,
       require: false,
-      default () {
-        return ['#7167D5', '#53A0FD']
-      }
+      // default () {
+      //   return ['#7167D5', '#53A0FD']
+      // }
     },
 
     // submenu backgorund
@@ -237,6 +228,9 @@ export default {
   },
 
   computed: {
+    avatarBgStyle () {
+      return `background-image: url('${ this.avatarURL }')`
+    },
     navbarStyle () {
       let style ='',
           color = 'color: ',
@@ -248,12 +242,12 @@ export default {
         style += color
       }
 
-      if (this.SidebarGradientBackground) {
-        let direction = this.SidebarGradientBackground.length === 3 ? this.SidebarGradientBackground[2] : 'right'
-        backgroundImage += `linear-gradient(to ${direction}, ${this.SidebarGradientBackground[0]}, ${this.SidebarGradientBackground[1]};`
+      if (this.barGradientBackground) {
+        let direction = this.barGradientBackground.length === 3 ? this.barGradientBackground[2] : 'right'
+        backgroundImage += `linear-gradient(to ${direction}, ${this.barGradientBackground[0]}, ${this.barGradientBackground[1]};`
         style += backgroundImage
-      } else if (this.SidebarBackground) {
-        backgroundColor += this.SidebarBackground + ';'
+      } else if (this.barBackground) {
+        backgroundColor += this.barBackground + ';'
         style += backgroundColor
       }
 
@@ -271,12 +265,12 @@ export default {
         style += color
       }
 
-      if (this.barGradientBackground) {
-        let direction = this.barGradientBackground.length === 3 ? this.barGradientBackground[2] : 'bottom'
-        backgroundImage += `linear-gradient(to ${direction}, ${this.barGradientBackground[0]}, ${this.barGradientBackground[1]};`
+      if (this.SidebarGradientBackground) {
+        let direction = this.SidebarGradientBackground.length === 3 ? this.SidebarGradientBackground[2] : 'bottom'
+        backgroundImage += `linear-gradient(to ${direction}, ${this.SidebarGradientBackground[0]}, ${this.SidebarGradientBackground[1]};`
         style += backgroundImage
-      } else if (this.barBackground) {
-        backgroundColor += this.barBackground + ';'
+      } else if (this.SidebarBackground) {
+        backgroundColor += this.SidebarBackground + ';'
         style += backgroundColor
       }
 
@@ -334,37 +328,16 @@ export default {
       }
     },
 
-    toggleSubmenu (item) {
-      let $menuItemWrapper = event.currentTarget.parentElement
-          
 
-      if (!item.showSubmenu || 'showSubmenu' in item === false) {
-        if ('showSubmenu' in item === false) {
-          this.$set(item, 'showSubmenu', true)
-        }
+    /* 
+    ** Events to emit
+    */
+    avatarClicked () {
+      this.$emit('avatarClicked')
+    },
 
-        item.showSubmenu = true
-
-        this.$nextTick(() => {
-          let menuItemWrapperHeight = $menuItemWrapper.offsetHeight,
-              $submenu = $menuItemWrapper.querySelector('.submenu-item-wrapper'),
-              submenuItemWrapperHeight = 0
-
-          for (let $subitem of $submenu.children) {
-            submenuItemWrapperHeight += $subitem.offsetHeight
-          }
-
-          menuItemWrapperHeight += submenuItemWrapperHeight
-          $menuItemWrapper.style.height = menuItemWrapperHeight + 'px'
-
-          $menuItemWrapper.classList.add('active')
-        })
-
-      } else {
-        item.showSubmenu = false
-        $menuItemWrapper.style.height = null
-        $menuItemWrapper.classList.remove('active')
-      }
+    searchClicked () {
+      this.$emit('searchClicked')
     }
   }
 }
@@ -381,10 +354,9 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   width: 100%;
   height: 50px;
+  z-index: 99;
 
   .mt-navbar {
-    // display: flex;
-    // align-items: center;
     width: 100%;
     height: 100%;
 
@@ -397,27 +369,38 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     .menu {
       flex: 1;
-      // display: flex;
-      // justify-content: flex-end;
-      // align-items: center;
       height: 100%;
 
-      @media (max-width: 500px) {
-        display: none;
-      }
+      // @media (max-width: 500px) {
+      //   display: none;
+      // }
 
       .menu-item {
-        // display: flex;
-        // align-items: center;
         width: 100%;
         max-width: 100px;
         height: 100%;
 
-        i {
-          margin-right: 5px;
+        &.square-item {
+          width: 50px !important;
         }
 
-        span {}
+        span {
+          font-weight: 500;
+        }
+
+        i {
+          margin-right: 10px;
+        }
+
+        .avatar {
+          width: 35px;
+          height: 35px;
+          border: 2px solid white;
+          border-radius: 50%;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+        }
       }
     }
   }
@@ -453,17 +436,13 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       pointer-events: auto;
     }
 
-    @media (min-width: 501px) {
-      display: none;
-    }
-
     .side-menu {
       position: absolute;
       top: 0px;
       bottom: 0px;
       left: 0px;
       width: 80%;
-      max-width: 450px;
+      max-width: 350px;
       background: white;
       box-shadow: 3px 0px 25px -5px rgba(0, 0, 0, 0.4);
       user-select: auto;
@@ -474,71 +453,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
         height: 100px;
         max-width: 340px;
         text-align: center;
-      }
-
-      .menu-item-wrapper {
-        position: relative;
-        width: 100%;
-        height: 70px;
-        transition: height 0.2s $easing;
-        overflow: hidden;
-
-        .menu-item {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 70px;
-          text-decoration: none;
-          color: $fontColor;
-
-          i {
-            flex: 0;
-            margin-right: 35px;
-          }
-
-          p {
-            flex: 1;
-          }
-        }
-
-        .carret {
-          position: absolute;
-          top: 22.5px;
-          right: 35px;
-          width: 25px;
-          height: 25px;
-          border-radius: 100%;
-          flex-basis: 25px;
-          text-align: center;
-          transition: transform 0.2s linear;
-          z-index: 3;
-
-          &.active {
-            transform: rotate(-90deg);
-          }
-
-          i {
-            margin: 0;
-          }
-        }
-
-        .submenu-item-wrapper {
-          position: relative;
-          width: 100%;
-          background: #eeeeee;
-          box-shadow: inset -1px 1px 3px -2px rgba(0, 0, 0, 0.4), inset -1px -1px 3px -2px rgba(0, 0, 0, 0.4);
-
-          .menu-item {
-            height: 50px;
-            text-decoration: none;
-            color: lighten($fontColor, 20%);
-
-            &:last-child {
-              border-bottom: 1px solid transparent;
-            }
-          }
-        }
       }
 
       .control {
@@ -634,7 +548,7 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .slide-enter, .slide-leave-to {
-  transform: translateX(-340px);
+  transform: translateX(-100%);
   will-change: transform;
 }
 
