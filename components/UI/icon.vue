@@ -35,7 +35,7 @@ export default {
     color: {
       type: String,
       required: false,
-      default: 'black'
+      // default: 'black'
     }
 
   },
@@ -66,4 +66,11 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+i {
+  color: black;
+}
+</style>
+
 

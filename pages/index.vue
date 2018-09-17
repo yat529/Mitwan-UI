@@ -80,6 +80,10 @@
             :roundness="5"/>
         </div>
 
+        <div class="my-15 px-35">
+          <mt-calender />
+        </div>
+
       </div>
     </mt-dual-panel>
     
