@@ -209,8 +209,7 @@ export default {
             if (this.isRangeStartWithin) {
               // if not in current month
               if ( !this.isWithinCurrentMonth(range[0]) ) {
-                console.log('here')
-                range.splice(0, 1, this.createNextDateObj(range[0]))
+                range.splice(0, 1, this.createDateObj(range[0]))
               }
             }
             else {
@@ -221,7 +220,7 @@ export default {
             // if range end is in current date picker
             if (this.isRangeEndWithin) {
               if ( !this.isWithinCurrentMonth(range[1]) ) {
-                range.splice(1, 1, this.createPreviousDateObj(range[1]))
+                range.splice(1, 1, this.createDateObj(range[1]))
               }
             }
             else {
@@ -397,27 +396,16 @@ export default {
     ** @ouput: Date Object
     ** @param: Date Object
     */
-    createPreviousDateObj (date) {
-      let previousIndex = this.previousMonthDays.indexOf(date.day)
+    createDateObj (date) {
+      let region
 
-      // if range is in current date picker but in previouse month
-      if (previousIndex >= 0) {
+      if ( new Date(date.year, date.month - 1) < new Date(this.year, this.month - 1) ) {
+        let previousIndex = this.previousMonthDays.indexOf(date.day)
         date.index = previousIndex
-      }
-
-      return date
-    },
-
-    /* 
-    ** Create the next date object
-    ** @ouput: Date Object
-    ** @param: Date Object
-    */
-    createNextDateObj (date) {
-      let nextIndex = this.nextMonthDays.indexOf(date.day)
-
-      // if range is in current date picker but in next month
-      if (nextIndex >= 0) {
+      } 
+      
+      else if ( new Date(date.year, date.month - 1) > new Date(this.year, this.month - 1) ) {
+        let nextIndex = this.nextMonthDays.indexOf(date.day)
         date.index = nextIndex + this.nextMonthFirstDayIndex
       }
 
@@ -441,8 +429,6 @@ export default {
       this.selectedDateIndex = index
 
       if ( index < this.currentMonthFirstDayIndex ) {
-        // selectedDate.month --
-        // selectedDate.index = this.calenderSize - index - 1
         this.$emit('previousMonth')
       } else if ( index < this.nextMonthFirstDayIndex && index >= this.currentMonthFirstDayIndex ) {
         this.$emit('selectMonth', selectedDate)
@@ -539,7 +525,8 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
         left: 0px;
         bottom: 1px;
         width: 100%;
-        background: beige;
+        background: $primary;
+        opacity: 0.15;
         border-radius: 15px 0 0 15px;
         z-index: -2;
       }
@@ -552,7 +539,8 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
           left: 0px;
           bottom: 1px;
           width: 100%;
-          background: beige;
+          background: $primary;
+          opacity: 0.15;
           z-index: -2;
         }
       }
