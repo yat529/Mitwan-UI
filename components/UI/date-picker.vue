@@ -1,7 +1,7 @@
 <template>
   <div class="mt-date-picker mt-layout-row" :class="selectionComplete ? 'selection-complete' : ''">
     <label :for="'day-' + index"
-      class="day" :class="classObj(index)"
+      class="day text--white" :class="classObj(index)"
       :style="style"
       v-for="(day, index) in calenderSize" :key="index">
       
@@ -510,7 +510,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     height: 35px;
     line-height: 35px;
     text-align: center;
-    font-size: 1rem;
     user-select: none;
     background: transparent;
     transition: all 0.2s $easing;

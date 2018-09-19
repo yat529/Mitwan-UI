@@ -1,3 +1,5 @@
+@import '$variables';
+
 /* 
 ** Output padding/margin style
 ** $type: 'padding/margin' 
@@ -226,6 +228,33 @@ Navbar Padding Fix
   right: 0px;
   bottom: 0px;
 }
+
+
+
+/* 
+** Z-index shortcut
+** @param $layers
+** note: build z-main, z-shadow...
+*/
+
+@each $layer, $index in $layers {
+  .z-#{$layer} {
+    z-index: $index;
+  }
+}
+
+/* 
+** Z-index Numeric
+** @param $layersNum
+** note: build z-10, z-20...
+*/
+
+@each $layer, $index in $layersNum {
+  .z-#{$layer} {
+    z-index: $index;
+  }
+}
+
 
 
 

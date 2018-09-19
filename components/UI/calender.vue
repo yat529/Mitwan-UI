@@ -3,19 +3,19 @@
 
     <div class="mt-calender-carousel mt-layout-row px-15">
       <div class="left mt-layout-row row-center py-15" @click="prevMonth">
-        <mt-icon faName="fas fa-caret-left" faStyleClass="fa-fw" />
+        <mt-icon class="text--white" faName="fas fa-caret-left" faStyleClass="fa-fw" />
       </div>
-      <div class="display mt-layout-row row-center py-15" @click="showSelection = !showSelection">
+      <div class="display mt-layout-row row-center py-15 text--white" @click="showSelection = !showSelection">
         {{ `${year}年 ${month}月` }}
       </div>
       <div class="right mt-layout-row row-center py-15" @click="nextMonth">
-        <mt-icon faName="fas fa-caret-right" faStyleClass="fa-fw" />
+        <mt-icon class="text--white" faName="fas fa-caret-right" faStyleClass="fa-fw" />
       </div>
     </div>
 
     <div class="mt-calender-body">
       <div class="mt-layout-row px-15">
-        <div class="label" v-for="(item, index) in labels" :key="index">{{ item }}</div>
+        <div class="label text--white" v-for="(item, index) in labels" :key="index">{{ item }}</div>
       </div>
 
       <mt-date-picker class="p-15"
@@ -249,7 +249,7 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   
   &-body {
     position: relative;
-    background: white;
+    // background: white;
     z-index: 2;
 
     .label {
@@ -259,7 +259,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       text-align: center;
       font-size: 0.9rem;
       font-weight: 500;
-      color: $fontColor;
       user-select: none;
     }
 
@@ -271,6 +270,7 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       width: 100%;
       height: 100%;
       background: white;
+      border-radius: 0 0 15px 15px;
       z-index: 10;
 
       .year-list {
@@ -364,16 +364,16 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 }
 
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.2s $easing;
-  transition-delay: 0.4s;
-}
+// .slide-enter-active,
+// .slide-leave-active {
+//   transition: all 0.2s $easing;
+//   transition-delay: 0.4s;
+// }
 
-.slide-enter,
-.slide-leave-to {
-  transform: translateY(-100%);
-}
+// .slide-enter,
+// .slide-leave-to {
+//   transform: translateY(-100%);
+// }
 
 </style>
 

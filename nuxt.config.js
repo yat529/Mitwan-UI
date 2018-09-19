@@ -50,6 +50,8 @@ module.exports = {
   */
 
   css: [
+    // color style
+    '@assets/style/color.scss',
     // layout style
     '@assets/style/layout.scss',
     // effect style

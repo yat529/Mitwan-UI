@@ -1,0 +1,21 @@
+
+/* 
+** Font sizes
+*/
+$fontSizes: (
+  'regular': 1rem,
+  'small': 0.9rem,
+  'x-small': 0.7rem,
+  'large': 1.1rem,
+  'x-large': 1.3rem
+);
+
+/* 
+** Font Size Classes
+** ex: .text-regular
+*/
+@each $name, $value in $fontSizes {
+  .text--#{$name} {
+    color: $value
+  }
+}

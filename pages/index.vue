@@ -4,6 +4,7 @@
 
     <mt-dual-panel :centerContent="true">
       <div class="px-35" style="width: 100%">
+
         <mt-input class="my-15 px-35" 
           label="电子邮件"
           hint="请输入的电子邮件地址"
@@ -40,6 +41,10 @@
           :required="true"
           :validationCheckIcon="true"
           :persistentHint="true"/>
+
+        <div class="my-15 px-35">
+          <mt-date-selector />
+        </div>
 
         <div class="my-15 px-35">
           <mt-button class="mw-100"
@@ -80,9 +85,7 @@
             :roundness="5"/>
         </div>
 
-        <div class="my-15 px-35">
-          <mt-calender />
-        </div>
+        
 
       </div>
     </mt-dual-panel>

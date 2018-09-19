@@ -104,6 +104,14 @@ export default {
     useCustomIcon: {
       type: Boolean,
       require: false
+    },
+
+    // If the Custom Icon is persistent
+    // Note: Used with useCustomIcon prop
+    // ex: used in date selecotr or time selector
+    persistentCustomIcon: {
+      type: Boolean,
+      require: false,
     }
   },
 
@@ -225,7 +233,7 @@ export default {
       return !this.useCustomIcon && this.validationCheckIcon && this.validated
     },
     showCustomIcon () {
-      return this.useCustomIcon && !!this.content
+      return this.useCustomIcon && this.persistentCustomIcon || this.useCustomIcon && !!this.content
     }
 
   },
@@ -364,7 +372,7 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     bottom: 0px;
     left: 0px;
     width: 100%;
-    height: 1.5px;
+    height: 1px;
     background-color: $primary;
 
     &::after {
@@ -403,6 +411,11 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     .custom-icon {
       display: inline-block;
+      transform: translateX(-50%);
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 

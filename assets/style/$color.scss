@@ -1,0 +1,33 @@
+$primary: #6480E6;
+$error: #D24F4C;
+$success: #73AF2D;
+$warning: #FFD54F;
+$fontColor: #2A2A2A;
+$fontColorLight: #b1b1b1;
+$greyBg: #e6e6e6;
+
+
+$colors: (
+  'primary': $primary,
+  'error': $error,
+  'success': $success,
+  'warning': $warning,
+  'black': $fontColor,
+  'grey': $fontColorLight,
+  'background': $greyBg,
+  'white': white
+);
+
+$gradientColorSets: (
+  'primary': (
+    'default': map-get($colors, 'primary'),
+    'dark': #7167D5,
+    'light': #53A0FD
+  ),
+
+  'grey': (
+    'default': map-get($colors, 'grey'),
+    'dark': darken(map-get($colors, 'grey'), 0.2),
+    'light': lighten(map-get($colors, 'grey'), 0.2)
+  )
+);

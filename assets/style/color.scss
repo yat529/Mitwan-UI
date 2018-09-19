@@ -1,10 +1,63 @@
-$primary: #6480E6;
-$error: #D24F4C;
-$success: #73AF2D;
-$warning: #FFD54F;
-
-$fontColor: #2A2A2A;
-$fontColorLight: #b1b1b1;
+@import '$color';
 
 
-$greyBg: #e6e6e6;
+/* 
+** Text Color Classes
+** ex: .text--primary
+*/
+@each $name, $value in $colors {
+  .text--#{$name} {
+    color: $value;
+  }
+
+  .text-hover--#{$name} {
+    &:hover {
+      color: $value;
+    }
+  }
+};
+
+/* 
+** Background Color Classes
+** ex: .bg--primary
+*/
+@each $name, $value in $colors {
+  .bg--#{$name} {
+    color: $value;
+  }
+
+  .bg-hover--#{$name} {
+    &:hover {
+      color: $value;
+    }
+  }
+};
+
+/* 
+** Background Gradient Color Classes
+** ex: .bg-gradient--primary .bg-gradient-hover--primary
+*/
+@mixin buildBackgroundGradient ($direction, $name) {
+
+  @each $name, $set in $gradientColorSets {
+    $light: map-get($set, 'light');
+    $dark: map-get($set, 'dark');
+    $default: map-get($set, 'default');
+
+    &--#{$name} {
+      background-image: linear-gradient(to $direction, $dark, $light);
+      background-color: $default;
+    };
+
+    &-hover--#{$name} {
+      &:hover {
+        background-image: linear-gradient(to $direction, $dark, $light);
+        background-color: $default;
+      }
+    };
+  }
+};
+
+.bg-gradient {
+  @include buildBackgroundGradient(right, 'primary');
+}
