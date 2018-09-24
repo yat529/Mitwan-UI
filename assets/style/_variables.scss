@@ -1,0 +1,55 @@
+/* 
+** Font Sizes
+*/
+
+@function pixelToRem ($fontSize) {
+  @return $fontSize/16 +rem;
+}
+
+$fontSizes: (
+  'regular': pixelToRem(16),
+  'small': pixelToRem(14),
+  'x-small': pixelToRem(12),
+  'large': pixelToRem(24),
+  'x-large': pixelToRem(28),
+  'header': pixelToRem(28),
+  'sub-header': pixelToRem(24),
+  'body': pixelToRem(16),
+  'caption': pixelToRem(12)
+);
+
+/* 
+** Main Layer Name
+** ex: z-main, z-shadow
+*/
+
+$layers: (
+  'main': 1,
+  'shadow': -1,
+  'overlay': 10,
+);
+
+/* 
+** Numerical Layer Name
+** note: build z-index from 10 to 100
+** ex: z-20, z-30
+*/
+
+@function buildLayers ($start, $end) {
+  $index: $start;
+  $layerMap: ();
+
+  @while $index <= $end {
+    $map: (
+      #{$index}: $index
+    );
+    $layerMap: map-merge($layerMap, $map);
+    
+    $index: $index + 10;
+    
+  }
+
+  @return $layerMap;
+}
+
+$layersNum: buildLayers(10, 100);

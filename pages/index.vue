@@ -43,7 +43,7 @@
           :persistentHint="true"/>
 
         <div class="my-15 px-35">
-          <mt-date-selector />
+          <mt-date-picker :rangeSelection="true" />
         </div>
 
         <div class="my-15 px-35">

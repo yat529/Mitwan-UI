@@ -1,10 +1,19 @@
 <template>
   <div>
     <div class="mt-input" :class="hasError ? 'error' : ''">
-      <div class="label" ref="label">{{ label }}</div>
-      <input @focus="focus" @blur="blur" v-model="content" :type="type"/>
+      <div class="label text-regular" ref="label">{{ label }}</div>
+      <input class="text-regular text--black" v-if="!customInputSlote"
+        @focus="focus" 
+        @blur="blur" 
+        v-model="content" 
+        :type="type"/>
+
+      <div class="custom-input-slot" v-else>
+        <slot name="custom-input"></slot>
+      </div>
+
       <div class="icon">
-        <span class="required-label" v-if="showRequiredIcon">{{ requiredMsg }}</span>
+        <span class="required-label text-x-small" v-if="showRequiredIcon">{{ requiredMsg }}</span>
         <checkIcon :width="15" :height="15" v-else-if="showCheckIcon"></checkIcon>
         <div class="custom-icon" v-else-if="showCustomIcon" @click="clickCustomIcon">
           <slot></slot>
@@ -13,10 +22,10 @@
       <div class="underline" ref="underline"></div>
     </div>
     <div class="mt-input-meta" :class="hasError && !persistentHint ? 'error' : ''">
-      <div class="hint" v-if="hasError || hint">
+      <div class="hint text-caption" v-if="hasError || hint">
         {{ hasError && !persistentHint ? errorMsg : hint }}
       </div>
-      <div class="counter" v-if="showCounter">{{ content.length + '/' + counterLimit }}</div>
+      <div class="counter text-caption" v-if="showCounter">{{ content.length + '/' + counterLimit }}</div>
     </div>
   </div>
 </template>
@@ -112,6 +121,14 @@ export default {
     persistentCustomIcon: {
       type: Boolean,
       require: false,
+    },
+
+    // If custom slot component is used
+    // ex: date selector or time selector
+    customInputSlote: {
+      type: Boolean,
+      require: false,
+      default: false
     }
   },
 
@@ -308,9 +325,8 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
-@import '~assets/style/color';
-
+<style lang="scss">
+@import '~assets/style/_color';
 $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 .mt-input {
@@ -344,7 +360,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: absolute;
     top: 20px;
     left: 0px;
-    font-size: 0.9rem;
     color: $fontColorLight;
     line-height: 35px;
     transform: translateY(0px);
@@ -363,8 +378,11 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     border: none;
     width: 100%;
     height: 35px;
-    font-size: 0.9rem;
-    color: $fontColor;
+  }
+
+  .custom-input-slot {
+    width: 100%;
+    height: 35px;
   }
 
   .underline {
@@ -401,7 +419,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     .required-label {
       display: inline-block;
       padding: 3px 5px;
-      font-size: 0.6rem;
       color: $fontColorLight;
       border: 1px solid $fontColorLight;
       border-radius: 5px;
@@ -411,7 +428,7 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     .custom-icon {
       display: inline-block;
-      transform: translateX(-50%);
+      // transform: translateX(-50%);
 
       &:hover {
         cursor: pointer;
@@ -445,7 +462,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   .hint, .counter {
     padding: 5px 0px;
-    font-size: 0.6rem;
     color: $fontColorLight;
   }
 

@@ -1,11 +1,10 @@
-@import '$color';
-
 
 /* 
 ** Text Color Classes
 ** ex: .text--primary
 */
 @each $name, $value in $colors {
+
   .text--#{$name} {
     color: $value;
   }
@@ -23,12 +22,12 @@
 */
 @each $name, $value in $colors {
   .bg--#{$name} {
-    color: $value;
+    background-color: $value;
   }
 
   .bg-hover--#{$name} {
     &:hover {
-      color: $value;
+      background-color: $value;
     }
   }
 };

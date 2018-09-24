@@ -18,25 +18,26 @@
         <div class="label text--white" v-for="(item, index) in labels" :key="index">{{ item }}</div>
       </div>
 
-      <mt-date-picker class="p-15"
+      <mt-date-picker-core class="p-15" 
         :year="year"
         :month="month"
         :range="range"
-        @selectMonth="getDate"
-        @previousMonth="prevMonth"
-        @nextMonth="getNextMonthDate"/>
+        :rangeSelection="rangeSelection"
+        @selectDate="setRange"
+        @previousMonth="prevMonth" 
+        @nextMonth="nextMonth"/>
 
-      <div class="mt-layout-row year-date-selection" v-show="showSelection">
+      <div class="mt-layout-row year-date-selection bg-gradient--primary" v-show="showSelection">
         <div class="year-list">
           <div v-for="(year, index) in yearOptions" :key="index"
             @click="updateYear(year)">
-            <div>{{ year }}</div>
+            <div class="text--white">{{ year }}</div>
           </div>
         </div>
         <div class="month-list mt-layout-row-wrap row-center">
           <div class="px-15" v-for="(month, index) in monthOptions" :key="index"
             @click="updateMonth(month)">
-            <div>
+            <div class="text--white text-hover--primary bg-hover--white">
               {{ month }}
             </div>
           </div>
@@ -44,9 +45,8 @@
       </div>
     </div>
 
-    <transition name="slide">
-    <div class="mt-calender-action mt-layout-row pt-15" v-show="selectionComplete">
-      <div class="mt-layout-row row-center">
+    <div class="mt-calender-action mt-layout-row pb-15" v-show="selectionComplete">
+      <div class="mt-layout-row row-center" @click="submitRange">
         <mt-icon class="mr-15" faName="far fa-check-circle" faStyleClass="fa-fw" />
         确认
       </div>
@@ -55,7 +55,6 @@
         清除
       </div>
     </div>
-    </transition>
   </div>
 </template>
 
@@ -77,7 +76,7 @@ export default {
     rangeSelection: {
       type: Boolean,
       require: false,
-      default: true
+      default: false
     },
 
     labels: {
@@ -128,7 +127,7 @@ export default {
     ** Note: used to determine 'selection-complete' class
     */
     selectionComplete () {
-      if (this.range && this.range.length === 2) {
+      if (this.rangeSelection && this.range && this.range.length === 2) {
         if ( Object.keys(this.range[0]).length && Object.keys(this.range[1]).length ) {
           return true
         }
@@ -137,35 +136,28 @@ export default {
   },
 
   methods: {
-    getDate (dateObj) {
-      this.year = dateObj.year
-      this.month = dateObj.month
-      this.day = dateObj.day
-
-      // set selection range
-      this.setRange(dateObj)
-    },
-
-    getNextMonthDate (dateObj) {
-      // set selection range
-      this.setRange(dateObj)
-    },
-
     setRange (dateObj) {
-      if (this.rangeSelection) {
-        // range start is specified
-        if (this.range && this.range.length) {
-          this.range.splice(1, 1, dateObj)
-        } else {
-          this.range = this.$set([], this.range, [])
-          this.range.push(dateObj)
-        }
+      if (!this.range) {
+        this.range = []
       }
-    },
 
-    resetRange () {
+      // Range Selection
       if (this.rangeSelection) {
-        this.range = null
+        if (this.range.length < 2) {
+          this.range.push(dateObj)
+        } else {
+          this.range.splice(this.range.length - 1, 1, dateObj)
+        }
+      } 
+      // Single Selection
+      else {
+        if (this.range.length < 1) {
+          this.range.push(dateObj)
+        } else {
+          this.range.splice(this.range.length - 1, 1, dateObj)
+        }
+
+        this.submitRange()
       }
     },
 
@@ -205,13 +197,16 @@ export default {
       }
     },
 
-    submit() {
-      this.$emit('dateSelected', {
-        year: this.year,
-        month: this.month,
-        day: this.day
-      })
-    }
+    submitRange() {
+      this.$emit('dateSelected', this.range)
+    },
+
+    resetRange () {
+      if (this.rangeSelection) {
+        this.range = null
+        this.$emit('rangeReseted')
+      }
+    },
   },
 
   created () {
@@ -249,7 +244,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   
   &-body {
     position: relative;
-    // background: white;
     z-index: 2;
 
     .label {
@@ -269,7 +263,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       left: 0px;
       width: 100%;
       height: 100%;
-      background: white;
       border-radius: 0 0 15px 15px;
       z-index: 10;
 
@@ -292,11 +285,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
           &:hover {
             cursor: pointer;
-
-            > div {
-              background: $primary;
-              color: white;
-            }
           }
         }
       }
@@ -315,11 +303,10 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
           &:hover {
             cursor: pointer;
+          }
 
-            > div {
-              background: $primary;
-              color: white;
-            }
+          > div {
+            border-radius: 5px;
           }
         }
       }
@@ -335,45 +322,19 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       line-height: 35px;
       text-align: center;
       transition: all 0.2s $easing;
+      color: white;
 
       i {
+        color: white;
         transition: color 0.2s $easing;
       }
 
       &:hover {
         cursor: pointer;
-        color: white;
-
-        i {
-          color: white;
-        }
-      }
-    }
-
-    > div:first-child {
-      &:hover {
-        background: $success;
-      }
-    }
-
-    > div:last-child {
-      &:hover {
-        background: $error;
       }
     }
   }
 }
-
-// .slide-enter-active,
-// .slide-leave-active {
-//   transition: all 0.2s $easing;
-//   transition-delay: 0.4s;
-// }
-
-// .slide-enter,
-// .slide-leave-to {
-//   transform: translateY(-100%);
-// }
 
 </style>
 

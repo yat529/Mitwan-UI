@@ -1,13 +1,12 @@
-<template>
-  <div>
-    <nuxt/>
-  </div>
-</template>
+@import '_color';
+@import '_variables';
 
-<style>
-/* html {
+/* 
+** Global reset
+*/
+
+html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -19,6 +18,35 @@
 *, *:before, *:after {
   box-sizing: border-box;
   margin: 0;
-} */
-</style>
+}
 
+/* 
+** Font Sizes
+*/
+@import 'font';
+
+/* 
+** Colors
+*/
+@import 'colors';
+
+/* 
+** Layout
+*/
+@import 'layout';
+
+/* 
+** Effect
+*/
+@import 'effect';
+
+/* 
+** Animation
+*/
+@import 'animation';
+
+
+
+/* 
+** Components Styles 
+*/

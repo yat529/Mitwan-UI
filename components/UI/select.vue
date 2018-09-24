@@ -1,21 +1,21 @@
 <template>
   <div>
     <div class="mt-select" :class="hasError ? 'error' : ''" ref="taWrapper">
-      <div class="label" ref="label">{{ label }}</div>
-      <div class="mt-select-input" @click="focus" ref="selectInput">{{ content }}</div>
+      <div class="label text-regular" ref="label">{{ label }}</div>
+      <div class="mt-select-input text-regular text--black" @click="focus" ref="selectInput">{{ content }}</div>
       <ul class="mt-select-items" v-show="showSelection" v-click-outside="hideListOnClickOutside">
-        <li @click="select(null)">不选择</li>
-        <li v-for="(item, index) in items" :key="index" @click="select(item)">{{ item }}</li>
+        <li class="text-regular" @click="select(null)">不选择</li>
+        <li class="text-regular" v-for="(item, index) in items" :key="index" @click="select(item)">{{ item }}</li>
       </ul>
       <div class="carret"></div>
       <div class="icon">
-        <span class="required-label" v-if="showRequiredIcon">{{ requiredMsg }}</span>
+        <span class="required-label text-x-small" v-if="showRequiredIcon">{{ requiredMsg }}</span>
         <checkIcon :width="15" :height="15" v-else-if="showCheckIcon"></checkIcon>
       </div>
       <div class="underline" ref="underline"></div>
     </div>
     <div class="mt-select-meta" :class="hasError && !persistentHint ? 'error' : ''">
-      <div class="hint" v-if="hasError || hint">
+      <div class="hint text-caption" v-if="hasError || hint">
         {{ hasError && !persistentHint ? errorMsg : hint }}
       </div>
     </div>
@@ -243,7 +243,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: absolute;
     top: 20px;
     left: 0px;
-    font-size: 0.9rem;
     color: $fontColorLight;
     line-height: 35px;
     transform: translateY(0px);
@@ -261,8 +260,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     padding: 9px 0px;
     width: 100%;
     height: 35px;
-    font-size: 0.9rem;
-    color: $fontColor;
     overflow: hidden;
   }
 
@@ -284,7 +281,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
       padding: 10px 10px;
       margin: 0px;
       font-size: 0.9rem;
-      color: $fontColorLight;
       text-align: left;
       border-bottom: 1px solid #eeeeee;
       list-style-type: none;
@@ -329,7 +325,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     .required-label {
       display: inline-block;
       padding: 3px 5px;
-      font-size: 0.6rem;
       color: $fontColorLight;
       border: 1px solid $fontColorLight;
       border-radius: 5px;
@@ -368,7 +363,6 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   .hint {
     padding: 5px 0px;
-    font-size: 0.6rem;
     color: $fontColorLight;
   }
 
