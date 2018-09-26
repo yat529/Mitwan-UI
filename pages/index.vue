@@ -47,6 +47,10 @@
         </div>
 
         <div class="my-15 px-35">
+          <mt-time-picker />
+        </div>
+
+        <div class="my-15 px-35">
           <mt-button class="mw-100"
             label="确认"
             rippleColor="white"
