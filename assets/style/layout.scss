@@ -191,19 +191,38 @@ Navbar Padding Fix
 ** Layout
 */
 
-.mt-layout-row {
-   display: flex;
-   flex-direction: row;
-   flex-wrap: nowrap;
-   align-items: center;
+%flexLayout {
+  display: flex;
+  flex-wrap: nowrap;
+}
 
-   &-wrap {
-      display: flex;
+.mt-layout {
+  
+  &-row {
+  @extend %flexLayout;
+  flex-direction: row;
+
+    &-wrap {
+      @extend %flexLayout;
       flex-direction: row;
-      flex-wrap: nowrap;
-      align-items: center;
       flex-wrap: wrap;
-   }
+    }
+  }
+
+  &-column {
+  @extend %flexLayout;
+  flex-direction: column;
+
+    &-wrap {
+      @extend %flexLayout;
+      flex-direction: column;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.mt-layout-row,
+.mt-layout-column {
 
   //  alignment classes
   &.row-center {

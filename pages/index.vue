@@ -47,7 +47,7 @@
         </div>
 
         <div class="my-15 px-35">
-          <mt-time-picker :rangeSelection="true"/>
+          <mt-time-picker :rangeSelection="false"/>
         </div>
 
         <div class="my-15 px-35">

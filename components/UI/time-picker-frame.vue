@@ -15,13 +15,16 @@
         :initPeriod="time && time.period"
         ref="pickerCore"
         @selectTime="getTime"/>
+      </transition>
 
+      <transition name="slide-fade" mdoe="out-in">
       <div class="mt-time-picker-selections" v-if="showSelections">
-        <div class="mt-time-picker-selection mt-layout-row" v-for="(selection, index) in range" :key="index">
-          <div class="selection-clock mt-layout-row row-center">
-
+        <div class="mt-time-picker-selection mt-layout-row px-15" v-for="(selection, index) in range" :key="index">
+          <div class="selection-label mt-layout-row row-center" :class="{ 'label-start': rangeSelection && index === 0, 'label-end': rangeSelection && index === 1 }">
+            <h3 class="text-large text--white">{{ index === 0 ?  selectionsResultPageText.from : selectionsResultPageText.to }}</h3>
           </div>
-          <div class="selection-time mt-layout-row row-center">
+          <div class="selection-time mt-layout-column row-center">
+            <div class="text-large text--white">{{ mapPeriod(range[index]) }}</div>
             <div class="text-large text--white">{{ `${range[index].hour}:${ formatTime(range[index].minute) } ${range[index].period}` }}</div>
           </div>
         </div>
@@ -51,6 +54,37 @@ export default {
       type: Boolean,
       require: false
     },
+
+    mainTitleSelections: {
+      type: Array,
+      require: false,
+      default () {
+        return ['请选择时间', '时段开始', '时段结束', '完成']
+      }
+    },
+
+    subTitleSelections: {
+      type: Array,
+      require: false,
+      default () {
+        return ['请选择小时', '请选择分钟', '请确认选择']
+      }
+    },
+
+    selectionsResultPageText: {
+      type: Object,
+      require: false,
+      default () {
+        return {
+          from: '于',
+          to: '至',
+          am: '上午',
+          pm: '下午',
+          noon: '中午',
+          midnight: '午夜'
+        }
+      }
+    },
   },
 
   data () {
@@ -68,11 +102,11 @@ export default {
     },
 
     showSelections () {
-      return this.rangeSelection && this.range && this.range.length === 2 && this.currentCore === 2
+      return this.range && this.pickerCount === this.currentCore
     },
 
     mainTitle () {
-      let titleSelections = ['请选择时间', '时段开始', '时段结束', '完成']
+      let titleSelections = this.mainTitleSelections
 
       if (!this.rangeSelection) {
         return titleSelections[0]
@@ -90,7 +124,7 @@ export default {
     },
 
     subTitile () {
-      let titleSelections = ['请选择小时', '请选择分钟', '请确认选择']
+      let titleSelections = this.subTitleSelections
 
       if ( !this.rangeSelection && this.range || this.rangeSelection && (this.range && this.range.length === 2) ) {
         return titleSelections[2]
@@ -124,6 +158,30 @@ export default {
       return time
     },
 
+    /* 
+    ** Map Period to Selections Result Page Period text
+    ** @ouput: string
+    ** @param: timeObj from range Array
+    ** Note: the props of timeObj from range array is STRING, soo '==' is used instead
+    */
+    mapPeriod (time) {
+      let period
+      if (time.period === 'AM') {
+        if (time.hour == 12 && time.minute == 0) {
+          period = this.selectionsResultPageText.midnight
+        } else {
+          period = this.selectionsResultPageText.am
+        }
+      } else if (time.period === 'PM') {
+        if (time.hour == 12 && time.minute == 0) {
+          period = this.selectionsResultPageText.noon
+        } else {
+          period = this.selectionsResultPageText.pm
+        }
+      }
+      return period
+    },
+
     submit () {
       let formatedTime = {
             hour: this.time.hour.toString(),
@@ -135,6 +193,7 @@ export default {
         if (!this.range) {
           this.range = []
           this.range.push(formatedTime)
+          this.currentCore ++
         } 
         // selection completed
         else {
@@ -159,11 +218,12 @@ export default {
     },
 
     reset () {
-      if (this.currentCore != 2) {
+      if (!this.range) return
+      if (this.currentCore != this.range.length) {
         let core = this.$refs.pickerCore[0]
         core.resetTime()
       }
-
+      
       this.time = null
       this.range = null
       this.currentCore = 0
@@ -223,14 +283,69 @@ export default {
         flex: 1;
         width: 100%;
 
-          .selection-clock {
-            width: 120px;
+          .selection-label {
+            position: relative;
+            width: 100px;
             height: 100%;
+            z-index: 1;
+
+            &.label-start {
+              
+              &::before {
+                content: "";
+                position: absolute;
+                left: 50%;
+                bottom: 0px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: white;
+                transform: translate(-50%, 50%);
+                z-index: 10;
+              }
+
+              &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                bottom: 0px;
+                width: 2px;
+                height: 20%;
+                background: white;
+                opacity: 0.5;
+                transform: translateX(-50%);
+              }
+            }
+
+            &.label-end {
+
+              &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: 0px;
+                width: 2px;
+                height: 20%;
+                background: white;
+                opacity: 0.5;
+                transform: translateX(-50%);
+              }
+            }
           }
 
           .selection-time {
             flex: 1;
             height: 100%;
+
+            div {
+              width: 110px;
+              text-align: left;
+            }
+
+            div:first-child {
+              margin-bottom: 10px;
+              font-weight: 300;
+            }
           }
       }
       
