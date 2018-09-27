@@ -1,12 +1,12 @@
 <template>
   <div class="mt-watch-wrapper mt-layout-row row-center">
     <div class="mt-watch-face">
-      <div class="mt-watch-face-period">
-        <div class="am-period" :class="period === 0 ? 'active' : ''" @click="period = 0">am</div>
-        <div class="pm-period" :class="period === 1 ? 'active' : ''" @click="period = 1">pm</div>
+      <div class="mt-watch-face-period" v-if="showPeriodDisplay">
+        <div class="am-period text-caption" :class="period === 'AM' ? 'active' : ''" @click="period = 'AM'">AM</div>
+        <div class="pm-period text-caption" :class="period === 'PM' ? 'active' : ''" @click="period = 'PM'">PM</div>
       </div>
 
-      <div class="mt-watch-face-display">
+      <div class="mt-watch-face-display" v-if="showTimeDisplay">
         <div class="hour-display" @click="isPickingHour = true">{{ formatTime(hour) }}</div>
         <div class="minute-display" @click="isPickingHour = false">{{ formatTime(minute) }}</div>
       </div>
@@ -24,14 +24,42 @@
 
 <script>
 export default {
+  props: {
+    initHour: {
+      type: [Number, String],
+      require: false
+    },
+    initMinute: {
+      type: [Number, String],
+      requrie: false
+    },
+    initPeriod: {
+      type: String,
+      require: false
+    },
+
+    showTimeDisplay: {
+      type: Boolean,
+      require: false,
+      default: true
+    },
+
+    showPeriodDisplay: {
+      type: Boolean,
+      require: false,
+      default: true
+    }
+  },
+
   data () {
     return {
       hour: 12,
       minute: 0,
-      period: 0,
+      period: 'AM',
       isPickingHour: true,
       hourNeedleRotation: 0,
       minuteNeedleRotation: 0,
+      rotateDirection: 1,
     }
   },
 
@@ -59,19 +87,36 @@ export default {
 
   methods: {
     selectTime (value) {
-      if (value === 12) {
-        value = 0
-      }
-
       if (this.isPickingHour) {
+        this.setRotateDirection(value, this.hour)
+        this.hourNeedleRotation += this.rotateBy( this.getRotateMagnitude(value, this.hour),  )
         this.hour = value
-        this.hourNeedleRotation = 30 * value
       } else {
-        this.minute = 5 * value
-        this.minuteNeedleRotation = 30 * value
-      }
+        this.setRotateDirection(value, this.minute / 5)
+        this.minuteNeedleRotation += this.rotateBy( this.getRotateMagnitude(value, this.minute / 5) )
 
+        value = value === 12 ? 0 : value
+        this.minute = 5 * value
+      }
       this.submitTime()
+    },
+
+    getRotateMagnitude (newVal, oldVal) {
+      return newVal >= oldVal ?
+             Math.min( Math.abs(newVal - oldVal), Math.abs(newVal - (oldVal + 12)) ) :
+             Math.min( Math.abs(newVal - oldVal), Math.abs((newVal + 12) - oldVal) )
+    },
+
+    rotateBy (value) {
+      return 30 * value * this.rotateDirection
+    },
+
+    setRotateDirection (newVal, oldVal) {
+      if (newVal > oldVal) {
+        this.rotateDirection = (newVal - oldVal > 6) ? -1 : 1
+      } else {
+        this.rotateDirection = (oldVal - newVal > 6) ? 1 : -1
+      }
     },
 
     submitTime () {
@@ -83,17 +128,50 @@ export default {
       })
     },
 
+    resetTime () {
+      this.hour = 12
+      this.minute = 0
+      this.period = 'AM'
+      this.isPickingHour = true
+      this.hourNeedleRotation = 0
+      this.minuteNeedleRotation = 0
+      this.rotateDirection = 1
+    },
+
     // format time to string
     formatTime (time) {
-      if (time < 10) {
-        time = '0' + time.toString()
-      } else {
-        time = time.toString()
+      if (typeof time !== 'string') {
+        if (time < 10) {
+          time = '0' + time.toString()
+        } else {
+          time = time.toString()
+        }
       }
       return time
-    }
+    },
 
   },
+
+  // Setup Initial State
+  created () {
+    if (this.initHour) {
+      this.hourNeedleRotation = 30 * this.initHour
+      this.hour = this.initHour
+    }
+
+    if (this.initMinute) {
+      this.minuteNeedleRotation = 30 * (this.initMinute / 5)
+      this.minute = this.initMinute
+    }
+
+    if (this.initPeriod) {
+      this.period = this.initPeriod
+    }
+  },
+
+  mounted () {
+    this.submitTime()
+  }
 }
 </script>
 
@@ -166,6 +244,7 @@ $watchFaceBg: #3F484A;
         text-align: center;
         background: $greyBg;
         color: $watchFaceBg;
+        font-weight: bold;
         @extend %watchFontStyle;
 
         &.active {

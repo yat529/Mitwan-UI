@@ -26,7 +26,7 @@
       <mt-icon class="text--primary" faName="far fa-calendar-alt" faStyleClass="fa-fw"/>
     </mt-input>
 
-    <div class="mt-date-selector-popup bg-gradient--primary z-overlay" v-show="showCalender">
+    <div class="mt-date-selector-frame bg-gradient--primary z-overlay" v-show="showCalender">
       <mt-date-picker-frame 
         :rangeSelection="rangeSelection"
         @rangeReseted="range = null"
@@ -99,7 +99,7 @@ export default {
     }
   }
 
-  &-popup {
+  &-frame {
     position: absolute;
     top: 82px;
     left: 0;

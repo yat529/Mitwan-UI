@@ -27,7 +27,10 @@
       <mt-icon class="text--primary" faName="far fa-clock" faStyleClass="fa-fw"/>
     </mt-input>
 
-    <mt-time-picker-frame class="mt-time-picker-frame" v-show="showWatch"/>
+    <mt-time-picker-frame class="mt-time-picker-frame" v-show="showWatch" 
+      :rangeSelection="rangeSelection"
+      @submitTime="getTime"
+      @resetTime="resetTime"/>
   </div>
 </template>
 
@@ -64,8 +67,13 @@ export default {
   },
 
   methods: {
-    getTime (rangeObj) {
-      // 
+    getTime (range) {
+      this.range = range
+      this.showWatch = false
+    },
+
+    resetTime () {
+      this.range = null
     }
   }
 }
@@ -77,6 +85,24 @@ export default {
 
   &-input {
     position: relative;
+  }
+
+  &-custom-input {
+    width: 100%;
+    height: 100%;
+
+    > label.chip {
+      position: relative;
+      text-align: center;
+      border-radius: 5px;
+      padding: 3px 8px;
+
+      input.hidden {
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+      }
+    }
   }
 
   &-frame {
