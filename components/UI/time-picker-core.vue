@@ -82,6 +82,10 @@ export default {
     isPickingHour (newVal) {
       console.log('change needle')
       this.submitTime()
+    },
+
+    initHour (newVal) {
+      console.log('init hour change')
     }
   },
 
@@ -136,6 +140,8 @@ export default {
       this.hourNeedleRotation = 0
       this.minuteNeedleRotation = 0
       this.rotateDirection = 1
+
+      this.submitTime()
     },
 
     // format time to string
