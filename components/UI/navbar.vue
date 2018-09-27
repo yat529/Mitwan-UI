@@ -346,9 +346,8 @@ export default {
 
 
 <style lang="scss">
-@import '~assets/style/color';
-
-$easing: cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+@import '~assets/style/_color';
+@import '~assets/style/_variable';
 
 .mt-navbar-wrapper {
   position: relative;
@@ -532,36 +531,4 @@ $easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     font-size: 20px;
   }
 }
-
-
-/* 
-** Transitions 
-*/
-
-
-.slide-enter-active, .slide-leave-active {
-  transition: all 0.3s $easing;
-}
-
-.slide-enter-active {
-  transition-delay: 0.1s;
-}
-
-.slide-enter, .slide-leave-to {
-  transform: translateX(-100%);
-  will-change: transform;
-}
-
-.show-enter-active, .show-leave-active {
-  transition: all 0.1s $easing;
-}
-
-.show-enter {
-  transition-delay: 0.1s;
-}
-
-.show-enter, .show-leave-to {
-  opacity: 0;
-}
-
 </style>

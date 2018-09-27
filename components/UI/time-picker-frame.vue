@@ -7,7 +7,7 @@
     </div>
 
     <div class="mt-time-picker-wrapper py-15">
-      <transition name="slide" mdoe="out-in">
+      <transition name="slide-fade" mdoe="out-in">
       <mt-time-picker-core class="mt-time-picker-core" v-for="(core, index) in pickerCount" :key="index"
         v-if="currentCore === index"
         :initHour="time && time.hour"

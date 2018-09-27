@@ -1,0 +1,50 @@
+@import '_variable';
+
+/* 
+** Slide Enter/leave from left
+*/
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.3s $easing;
+}
+
+.slide-enter-active {
+  transition-delay: 0.1s;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translateX(-100%);
+  will-change: transform;
+}
+
+
+/* 
+** Fade Enter/leave
+*/
+.show-enter-active, .show-leave-active {
+  transition: all 0.1s $easing;
+}
+
+.show-enter {
+  transition-delay: 0.1s;
+}
+
+.show-enter, .show-leave-to {
+  opacity: 0;
+}
+
+/* 
+** Slide Fade Enter/leave from left
+*/
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all 0.3s $easing;
+}
+
+.slide-fade-enter-active {
+  transition-delay: 0.1s;
+}
+
+.slide-fade-enter, .slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+  will-change: transform;
+}
