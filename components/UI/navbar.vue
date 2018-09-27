@@ -347,7 +347,7 @@ export default {
 
 <style lang="scss">
 @import '~assets/style/_color';
-@import '~assets/style/_variable';
+@import '~assets/style/_variables';
 
 .mt-navbar-wrapper {
   position: relative;
