@@ -5,7 +5,7 @@ $warning: #FFD54F;
 $fontColor: #2A2A2A;
 $fontColorLight: #b1b1b1;
 $greyBg: #e6e6e6;
-
+$pureBlack: black;
 
 $colors: (
   'primary': $primary,
@@ -13,6 +13,7 @@ $colors: (
   'success': $success,
   'warning': $warning,
   'black': $fontColor,
+  'pureblack': $pureBlack,
   'grey': $fontColorLight,
   'background': $greyBg,
   'white': white
