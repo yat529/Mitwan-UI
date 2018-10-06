@@ -78,6 +78,7 @@ const Cuscroro = function (el, option) {
       console.log(factor, proportion)
 
       // define the perspective origin to left top with some adjustment
+      // 15 is the padding-right, need to take it out to adjust the perspective origin
       $scrollBarCtnr.style = `perspective-origin: ${containerWidth - scrollBarWidth/2 - 15 * (1 - proportion)}px ${containerHeight * proportion}px`
 
       // define the scrollbar height
