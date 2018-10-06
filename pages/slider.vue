@@ -53,8 +53,6 @@ export default {
     //   }, 2500)
     // })
 
-    console.log(proportion)
-
     // define the perspective origin to left top with some adjustment
     $viewport.style = `perspective-origin: ${viewportWidth - scrollbarWidth/2 - 10 * (1 - proportion)}px ${viewportHeight * proportion}px`
 

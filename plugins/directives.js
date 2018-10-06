@@ -1,4 +1,29 @@
 import Vue from 'vue'
+import Cuscrolo from '../cuscrolo.js'
+
+/* 
+** custom scroobar directive
+** @ full screen block element, with class 'cus-slider-container'
+** ex: hide the default scrollbar by place an extra 10px width of the 
+**     inner .cus-slider-container element, and hide it by applying 
+**     overflow: hidden to parent element.
+*/
+
+const customScrollBar = {
+  bind (el, binding, vnode) {
+
+    el.__Cuscrolo = Cuscrolo(el, {
+      hideOnInactive: 2000
+    })
+
+  },
+  unbind () {
+    el.__Cuscrolo.clear()
+    el.__Cuscrolo = null
+  }
+}
+
+Vue.directive('custom-scrollbar', customScrollBar)
 
 /* 
 ** click outside directive
