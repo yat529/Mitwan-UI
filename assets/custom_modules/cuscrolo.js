@@ -42,17 +42,17 @@ const Cuscroro = function (el, option) {
       if (!$scrollBarCtnrParent) return
 
       // Add required CSS classes
-      if ( !$scrollBarCtnrParent.classList.contains('slider-viewport') ) {
-        $scrollBarCtnrParent.classList.add('slider-viewport')
+      if ( !$scrollBarCtnrParent.classList.contains('cus-slider-viewport') ) {
+        $scrollBarCtnrParent.classList.add('cus-slider-viewport')
       }
 
-      if ( !$scrollBarCtnr.classList.contains('slider-container') ) {
-        $scrollBarCtnr.classList.add('slider-container')
+      if ( !$scrollBarCtnr.classList.contains('cus-slider-container') ) {
+        $scrollBarCtnr.classList.add('cus-slider-container')
       }
 
       
       $scrollBar = document.createElement('div')
-      $scrollBar.classList.add('slider')
+      $scrollBar.classList.add('cus-slider')
 
       $pageContentCtnr = $scrollBarCtnr.querySelector('.doc-content')
       $scrollBarCtnr.insertBefore($scrollBar, $pageContentCtnr)
@@ -74,8 +74,6 @@ const Cuscroro = function (el, option) {
 
       factor = (containerHeight - scrollBarHeight)/(scrollHeight - containerHeight)
       proportion = 1 / (Math.abs(1 - 1/factor) + 2)
-
-      console.log(factor, proportion)
 
       // define the perspective origin to left top with some adjustment
       // 15 is the padding-right, need to take it out to adjust the perspective origin
@@ -219,7 +217,7 @@ const Cuscroro = function (el, option) {
     $scrollBarCtnr.scrollTop = translatedY / factor
   }
 
-
+  console.log("working!")
 
   // add link to method, used senario of new Cuscroro()
   this.prototype = methods

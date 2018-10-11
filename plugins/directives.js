@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Cuscrolo from '../custom_modules/cuscrolo.js'
+import Cuscrolo from '~/assets/custom_modules/cuscrolo.js'
 
 /* 
 ** custom scroobar directive

@@ -1,5 +1,13 @@
 @import '_variables';
 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s $easing;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 /* 
 ** Slide Enter/leave from left
 */

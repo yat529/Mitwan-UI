@@ -40,8 +40,8 @@ module.exports = {
 
   plugins: [
 
-    // global registration of UI components
-    '~plugins/loadUI',
+    // global registration of Gloabl components
+    '~plugins/loadGlobalComponents',
     '~plugins/directives',
 
   ],

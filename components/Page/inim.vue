@@ -1,23 +1,12 @@
 <template>
-  <div class="mt-layout-fixed cover-screen mt-layout-row row-center">
-    <div class="text--caption mt-layout-row row-center subtitle text--grey">
-      NEW PRACTICE STUDIO IS AN INTERDISCIPLINARY COLLABORATION BETWEEN ARCHITECTS, INTERIOR DESIGNERS, GRAPHIC DESIGNERS AND BRAND STRATEGISTS
+  <div class="mt-layout-abs cover-screen mt-layout-row row-center">
+    <div class="text--caption mt-layout-row row-center subtitle text--pureblack" v-if="subtitle">
+      {{ subtitle }}
     </div>
   
-    <div class="animated-initial-entry-effect mt-layout-fixed cover-screen mt-layout-row row-center">
-      <div class="animated-initial-content">
-        <div class="title text--pureblack">
-          <span class="title-initial hide-initial">S</span>ome
-          <span class="title-initial hide-initial">A</span>wesome
-          <span class="title-initial hide-initial">S</span>hit
-          <span class="title-initial hide-initial">H</span>ere!
-          <!-- <span class="title-initial hide-initial">F</span>ourpole
-          <span class="title-initial hide-initial">A</span>merica
-          <span class="title-initial hide-initial">C</span>orporation -->
-          <!-- <span class="title-initial hide-initial">N</span>ew
-          <span class="title-initial hide-initial">P</span>ractice
-          <span class="title-initial hide-initial">S</span>tudio -->
-        </div>
+    <div id="animated-initial-entry" class="animated-initial-entry-effect mt-layout-abs cover-screen mt-layout-row row-center">
+      <div id="animated-initial-content">
+        <div class="title text--pureblack" v-html="titleHTML"></div>
       </div>
     </div>
   </div>
@@ -25,11 +14,46 @@
 
 <script>
 export default {
-  mounted () {
-    let $animationWrapper = document.querySelector('.animated-initial-entry-effect')
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+
+    subtitle: {
+      type: String,
+      required: false
+    }
+  },
+
+  data () {
+    return {
+      showInitScreen: true
+    }
+  },
+
+  computed: {
+    titleHTML () {
+      let titleChars = this.title.split(' '),
+          html = ''
+
+      titleChars.forEach(word => {
+        let initial = word.slice(0, 1).toUpperCase(),
+            remain = word.slice(1) + ' '
+
+        html += `<span class="title-initial hide-initial">${ initial }</span>${ remain }`
+      })
+
+      return html
+    }
+  },
+
+  mounted() {
+    
+    let $animationWrapper = document.querySelector('#animated-initial-entry')
         $animationWrapper.classList.add('bg--pureblack')
 
-    let $animationContentWrapper = document.querySelector('.animated-initial-content')
+    let $animationContentWrapper = document.querySelector('#animated-initial-content')
 
     let $titleWrapper = document.querySelector('.title'),
         $initialLetters = document.querySelectorAll('.title-initial')
@@ -45,6 +69,9 @@ export default {
 
     // Cache the initial letters' width (the width of each letter is different)
     let initialLetterWidthCache = []
+
+    // Promise array for transitioned state
+    let transitionedState = []
 
     $initialLetters.forEach(($letter, index) => {
       // letter width
@@ -133,8 +160,9 @@ export default {
 
         setTimeout(() => {
           // toggle full screen wrapper bg color classes
-          $animationWrapper.classList.remove('bg--pureblack')
-          // $animationWrapper.classList.add('bg--white')
+          if ($animationWrapper.classList.contains('bg--pureblack')) {
+            $animationWrapper.classList.remove('bg--pureblack')
+          }
         }, 100)
 
 
@@ -160,7 +188,7 @@ export default {
 .animated-initial-entry-effect {
   transition: background-color 0.6s ease-in-out;
 
-  .animated-initial-content,
+  #animated-initial-content,
   .title {
     position: relative;
   }
@@ -198,10 +226,10 @@ export default {
   position: absolute;
   top: 39%;
   left: 50%;
-  width: 1000px;
+  width: 1200px;
   transform: translate(-50%, -90%);
   font-family: 'Oswald', sans-serif;
-  font-size: 16px !important;
+  font-size: 18px !important;
   font-weight: bold;
   text-align: center;
 }
