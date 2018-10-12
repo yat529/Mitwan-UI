@@ -1,10 +1,11 @@
 <template>
   <div id="viewport" class="cus-slider-viewport">
-    <div class="cus-slider-container" v-custom-scrollbar="true">
-      <div class="doc-content">
+    <div class="cus-slider-container" v-custom-scrollbar="start">
+      <div class="doc-content scrollbar-padding-fix">
         <slot name="pageContent"></slot>
       </div>
     </div>
+    <slot name="fixed-layer" class="mt-layout-abs cover-screen"></slot>
   </div>
 </template>
 
@@ -15,6 +16,16 @@
 .slider-container in the inner container, size of the full screen, but overflow-y set to scroll, to allow the scroll of doc content
 .slider is the custom scrollbar
 */
+
+export default {
+ props: {
+   start: {
+     type: Boolean,
+     required: false,
+     default: true
+   }
+ }
+}
 
 </script>
 
@@ -36,6 +47,10 @@
   width: calc(100% + 15px);
   height: 100%;
   perspective: 1px;
+
+  .scrollbar-padding-fix {
+    padding-right: 8px !important;
+  }
 
   .cus-slider {
     position: absolute;

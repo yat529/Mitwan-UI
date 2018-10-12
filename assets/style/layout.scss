@@ -235,6 +235,9 @@ Navbar Padding Fix
   &.row-right {
     justify-content: flex-end;
   }
+  &.row-end {
+    justify-content: space-between;
+  }
 }
 
 /* 

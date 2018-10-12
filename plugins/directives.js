@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Cuscrolo from '~/assets/custom_modules/cuscrolo.js'
+import Cuscroro from '~/assets/custom_modules/cuscroro.js'
 
 /* 
 ** custom scroobar directive
@@ -12,14 +12,26 @@ import Cuscrolo from '~/assets/custom_modules/cuscrolo.js'
 const customScrollBar = {
   bind (el, binding, vnode) {
 
-    el.__Cuscrolo = Cuscrolo(el, {
-      hideOnInactive: 2000
-    })
+    if (el && binding.value) {
+      el.__Cuscroro = Cuscroro(el, {
+        hideOnInactive: 2000
+      })
+    }
 
   },
+  update (newVal, oldVal) {
+    if (newVal) {
+      // new Cuscroro in nextTick
+      Vue.nextTick(() => {
+        newVal.__Cuscroro = Cuscroro(newVal, {
+          hideOnInactive: 2000
+        })
+      })
+    }
+  },
   unbind () {
-    el.__Cuscrolo.clear()
-    el.__Cuscrolo = null
+    el.__Cuscroro.clear()
+    el.__Cuscroro = null
   }
 }
 
