@@ -51,14 +51,7 @@ module.exports = {
   */
 
   css: [
-    // color style
-    '@assets/style/style.scss',
-    // // layout style
-    // '@assets/style/layout.scss',
-    // // effect style
-    // '@assets/style/effect.scss',
-    // // animations
-    // '@assets/style/animation.scss',
+    '~assets/style/style.scss',
   ]
 }
 
