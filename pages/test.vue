@@ -57,6 +57,7 @@ export default {
 
       introEnd: false,
       sectionOffsetTopList: [],
+      currEvnt: ''
     }
   },
 
@@ -66,6 +67,22 @@ export default {
         this.$forceUpdate()
       }
     }
+  },
+
+  mounted () {
+    window.addEventListener('touchstart', (e) => {
+      // alert(e.touches.length, e.targetTouches.length)
+    })
+    // window.addEventListener('touchmove', () => alert('touchmove'))
+    window.addEventListener('touchend', (e) => {
+      if (e.changedTouches.length) {
+        alert(e.changedTouches.length + ' point removed')
+      }
+    })
+    // window.addEventListener('mousemove', () => alert('mousemove'))
+    // window.addEventListener('mousedown', () => alert('mousedown'))
+    // window.addEventListener('mouseup', () => alert('mouseup'))
+    // window.addEventListener('click', () => alert('click'))
   },
 
   updated () {
