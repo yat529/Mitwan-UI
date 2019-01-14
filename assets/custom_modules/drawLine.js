@@ -1,29 +1,41 @@
 const drawLine = function ($canvas, canvasOption) {
 
+  if (!$canvas || !$canvas.nodeType) {
+    return
+  }
+
+  const options = canvasOption || {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    color: 'rgba(0,0,0,0.5)',
+    onEnter: null
+  }
+
   let lines = [],
       ctx = canvas.getContext('2d')
 
   // higg dpi screen resolution fix
   let dratio = window.devicePixelRatio
-  $canvas.width = canvasOption.width * dratio
-  $canvas.height = canvasOption.height * dratio
-  $canvas.style.width = canvasOption.width + 'px'
-  $canvas.style.height = canvasOption.height + 'px'
+  $canvas.width = options.width * dratio
+  $canvas.height = options.height * dratio
+  $canvas.style.width = options.width + 'px'
+  $canvas.style.height = options.height + 'px'
 
   /* 
   ** Line Object Constructor
   */
   function Line (startx, starty) {
     this.i = 1
+    this.drop = !! Math.round( Math.random() )
     this.startx = startx || Math.floor( Math.random() * $canvas.width )
     this.endx = this.startx + Math.floor( this.i * Math.random() * ($canvas.width - this.startx) )
-    this.starty = starty || 0
-    this.endy = $canvas.height + 20
+    this.starty = this.drop ? 0 : $canvas.height
+    this.endy = this.drop ? $canvas.height : 0
     this.x = this.startx
     this.y = this.starty
     this.easing = 0.005
     this.entered = false
-    this.color = canvasOption.color || "rgba(0,0,0,0.5)"
+    this.color = options.color
 
     this.randomDirection().updateEndpoints()
     return this
@@ -49,7 +61,7 @@ const drawLine = function ($canvas, canvasOption) {
 
   Line.prototype.update = function () {
     ctx.beginPath();
-    ctx.moveTo(this.x, 0)
+    ctx.moveTo(this.x, this.starty)
     ctx.lineTo(this.x, this.y)
     ctx.strokeStyle = this.color
     ctx.stroke()
@@ -62,19 +74,22 @@ const drawLine = function ($canvas, canvasOption) {
   }
 
   Line.prototype.enter = function () {
-    this.y += Math.abs(this.endy - this.y) * this.easing * 5
+    let sign = this.drop ? 1 : -1
+    this.y = this.y + sign * Math.abs(this.endy - this.y) * this.easing * 5
     return this
   }
 
   Line.prototype.draw = function () {
+    let sign = this.drop ? 1 : -1
 
     if (!this.entered) {
-      if ( Math.abs(this.endy - this.y) < 20 ) {
+      if ( Math.abs(this.endy - this.y) < 5 ) {
+        this.y = this.y + sign * 10
         this.entered = true
 
-        if (canvasOption.onEnter && typeof canvasOption.onEnter === 'function') {
+        if (options.onEnter && typeof options.onEnter === 'function') {
           console.log('run cb')
-          canvasOption.onEnter()
+          options.onEnter()
         }
       }
 
@@ -107,7 +122,7 @@ const drawLine = function ($canvas, canvasOption) {
   function drawLines () {
     for (let i = 0; i < canvasOption.lines; i++) {
       let startx = Math.floor((i + 1) * canvas.width / canvasOption.lines)
-      lines.push( new Line(startx, 0).update() )
+      lines.push( new Line(startx).update() )
     }
   }
 
